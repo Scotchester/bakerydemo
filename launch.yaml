@@ -37,6 +37,7 @@ phases:
   setup:
     - pip3 install -r requirements/development.txt
     - cp bakerydemo/settings/local.py.example bakerydemo/settings/local.py
+    - echo "DJANGO_SETTINGS_MODULE=bakerydemo.settings.local" > .env
   tenant:
     - echo $SITE_ID
     - python3 manage.py migrate --noinput
