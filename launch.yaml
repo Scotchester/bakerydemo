@@ -35,7 +35,7 @@ resources:
     # - LB_storage_secret_access_key
 phases:
   setup:
-    - pip3 install -r requirements/development.txt
+    - pip3 install -r requirements/production.txt
     - cp bakerydemo/settings/local.py.example bakerydemo/settings/local.py
     - echo "DJANGO_SETTINGS_MODULE=bakerydemo.settings.local" > .env
   tenant:
