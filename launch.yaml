@@ -4,6 +4,7 @@ env:
     TEST_PORT: 3000
     DEBUG: true
     UWSGI_WSGI_FILE: bakerydemo/wsgi.py
+    DJANGO_SETTINGS_MODULE: bakerydemo.settings.local
   # specific environments
   # (builds on base)
   production:
@@ -36,7 +37,6 @@ phases:
   setup:
     - pip3 install -r requirements/development.txt
     - cp bakerydemo/settings/local.py.example bakerydemo/settings/local.py
-    - echo "DJANGO_SETTINGS_MODULE=bakerydemo.settings.local" > .env
   tenant:
     - echo $SITE_ID
     - python3 manage.py migrate --noinput
