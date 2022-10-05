@@ -1,45 +1,23 @@
 env:
   base:
-    TEST_VAR: value1
-    TEST_PORT: 3000
     DEBUG: true
     UWSGI_WSGI_FILE: bakerydemo/wsgi.py
-    DJANGO_SETTINGS_MODULE: bakerydemo.settings.local
-  # specific environments
-  # (builds on base)
+  # specific environments (builds on base)
   production:
     DEBUG: false
 resources:
   database:
     type: postgres
-    # yields:
-    # - LB_database1_type
-    # - LB_database1_hostname
-    # - LB_database1_name
-    # - LB_database1_username
-    # - LB_database1_password
   cache:
     type: redis
-    # yields:
-    # - LB_cache_type
-    # - LB_cache_url
-    # - LB_cache_key_prefix
   storage:
     type: s3
-    # yields:
-    # - LB_storage_type
-    # - LB_storage_region
-    # - LB_storage_bucket
-    # - LB_storage_folder
-    # - LB_storage_access_key_id
-    # - LB_storage_secret_access_key
 phases:
   setup:
     - pip3 install -r requirements/production.txt
     - cp bakerydemo/settings/local.py.example bakerydemo/settings/local.py
     - echo "DJANGO_SETTINGS_MODULE=bakerydemo.settings.local" > .env
   tenant:
-    - echo $SITE_ID
     - python3 manage.py migrate --noinput
     - python3 manage.py load_initial_data
 routes:
