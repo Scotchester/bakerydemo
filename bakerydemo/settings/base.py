@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     "taggit",
     "wagtailfontawesome",
     "debug_toolbar",
+    "storages",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -123,6 +124,38 @@ WSGI_APPLICATION = "bakerydemo.wsgi.application"
 DATABASES = {
     "default": LBResources().settings("database")
 }
+
+# Redis
+CACHES = {
+    "default": LBResources().settings("cache")
+}
+
+# S3 (via MinIO)
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+AWS_STORAGE_BUCKET_NAME = LBResources().settings("storage")
+MINIO_PORT = os.environ.get("MINIO_PORT", "9000")
+
+AWS_S3_CUSTOM_DOMAIN = f"127.0.0.1:{MINIO_PORT}/{AWS_STORAGE_BUCKET_NAME}"
+AWS_S3_ENDPOINT_URL = f"http://minio:{MINIO_PORT}"
+
+AWS_S3_REGION_NAME = None
+AWS_S3_SIGNATURE_VERSION = "s3v4"
+
+# Do not allow overriding files on S3 as per Wagtail docs.
+# Important: Not having this setting may have consequences in losing files.
+AWS_S3_FILE_OVERWRITE = False
+
+# S3 Credentials
+AWS_ACCESS_KEY_ID = os.environ.get("MINIO_ROOT_USER", "")
+AWS_SECRET_ACCESS_KEY = os.environ.get("MINIO_ROOT_PASSWORD", "")
+
+# S3 Security
+AWS_QUERYSTRING_AUTH = False
+
+AWS_S3_OBJECT_PARAMETERS = {}
+AWS_S3_SECURE_URLS = False
+AWS_S3_USE_SSL = False
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
