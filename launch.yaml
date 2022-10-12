@@ -1,6 +1,7 @@
 env:
   base:
     DEBUG: true
+    DJANGO_SETTINGS_MODULE: bakerydemo.settings.local
     UWSGI_WSGI_FILE: bakerydemo/wsgi.py
   # specific environments (builds on base)
   production:
@@ -16,7 +17,6 @@ phases:
   setup:
     - pip3 install -r requirements/production.txt
     - cp bakerydemo/settings/local.py.example bakerydemo/settings/local.py
-    - echo "DJANGO_SETTINGS_MODULE=bakerydemo.settings.local" > .env
   tenant:
     - python3 manage.py migrate --noinput
     - python3 manage.py load_initial_data
