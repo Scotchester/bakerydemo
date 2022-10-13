@@ -154,7 +154,9 @@ AWS_SECRET_ACCESS_KEY = os.environ.get("MINIO_ROOT_PASSWORD", "")
 # S3 Security
 AWS_QUERYSTRING_AUTH = False
 
-AWS_S3_OBJECT_PARAMETERS = {}
+AWS_S3_OBJECT_PARAMETERS = {
+    "ACL": "public-read",
+}
 AWS_S3_SECURE_URLS = False
 AWS_S3_USE_SSL = False
 
