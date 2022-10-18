@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from launchbox import LBIdentity
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel
@@ -286,6 +287,16 @@ class HomePage(Page):
 
     def __str__(self):
         return self.title
+
+    def get_context(self, request):
+        context = super(HomePage, self).get_context(request)
+        context["user_exact_hit"] = LBIdentity('jpl-ldap').user.get('cranfill')
+        context["user_exact_miss"] = LBIdentity('jpl-ldap').user.get('cranfi')
+        context["user_search"] = LBIdentity('jpl-ldap').user.search('cranfi')
+        context["user_groups"] = LBIdentity('jpl-ldap').user.groups('cranfill')
+        context["group_exact_hit"] = LBIdentity('jpl-ldap').group.get('wcp.superusers')
+        context["group_exact_miss"] = LBIdentity('jpl-ldap').group.get('wcp.superdupers')
+        return context
 
 
 class GalleryPage(Page):
